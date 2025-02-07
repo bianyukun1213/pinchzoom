@@ -963,7 +963,7 @@ var definePinchZoom = function () {
 
         el.addEventListener('touchend', function (event) {
             if(target.enabled) {
-                fingers = event.touches.length;
+                fingers = 0;
                 updateInteraction(event);
             }
         });
