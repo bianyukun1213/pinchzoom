@@ -14,6 +14,7 @@ declare interface IPinchZoomOptions {
     useDoubleTap?: boolean;
     verticalPadding?: number;
     horizontalPadding?: number;
+    rtl?: number;
 
     onZoomStart?: PinchZoomEventHandler;
     onZoomEnd?: PinchZoomEventHandler;

@@ -28,52 +28,52 @@
 
 // polyfills
 if (typeof Object.assign != 'function') {
-  // Must be writable: true, enumerable: false, configurable: true
-  Object.defineProperty(Object, "assign", {
-    value: function assign(target, varArgs) { // .length of function is 2
-      if (target == null) { // TypeError if undefined or null
-        throw new TypeError('Cannot convert undefined or null to object');
-      }
-
-      var to = Object(target);
-
-      for (var index = 1; index < arguments.length; index++) {
-        var nextSource = arguments[index];
-
-        if (nextSource != null) { // Skip over if undefined or null
-          for (var nextKey in nextSource) {
-            // Avoid bugs when hasOwnProperty is shadowed
-            if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
-              to[nextKey] = nextSource[nextKey];
+    // Must be writable: true, enumerable: false, configurable: true
+    Object.defineProperty(Object, "assign", {
+        value: function assign(target, varArgs) { // .length of function is 2
+            if (target == null) { // TypeError if undefined or null
+                throw new TypeError('Cannot convert undefined or null to object');
             }
-          }
-        }
-      }
-      return to;
-    },
-    writable: true,
-    configurable: true
-  });
+
+            var to = Object(target);
+
+            for (var index = 1; index < arguments.length; index++) {
+                var nextSource = arguments[index];
+
+                if (nextSource != null) { // Skip over if undefined or null
+                    for (var nextKey in nextSource) {
+                        // Avoid bugs when hasOwnProperty is shadowed
+                        if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
+                            to[nextKey] = nextSource[nextKey];
+                        }
+                    }
+                }
+            }
+            return to;
+        },
+        writable: true,
+        configurable: true
+    });
 }
 
 if (typeof Array.from != 'function') {
-  Array.from = function (object) {
-    return [].slice.call(object);
-  };
+    Array.from = function (object) {
+        return [].slice.call(object);
+    };
 }
 
 // utils
-var buildElement = function(str) {
-  // empty string as title argument required by IE and Edge
-  var tmp = document.implementation.createHTMLDocument('');
-  tmp.body.innerHTML = str;
-  return Array.from(tmp.body.children)[0];
+var buildElement = function (str) {
+    // empty string as title argument required by IE and Edge
+    var tmp = document.implementation.createHTMLDocument('');
+    tmp.body.innerHTML = str;
+    return Array.from(tmp.body.children)[0];
 };
 
-var triggerEvent = function(el, name) {
-  var event = document.createEvent('HTMLEvents');
-  event.initEvent(name, true, false);
-  el.dispatchEvent(event);
+var triggerEvent = function (el, name) {
+    var event = document.createEvent('HTMLEvents');
+    event.initEvent(name, true, false);
+    el.dispatchEvent(event);
 };
 
 var definePinchZoom = function () {
@@ -85,32 +85,32 @@ var definePinchZoom = function () {
      * @constructor
      */
     var PinchZoom = function (el, options) {
-            this.el = el;
-            this.zoomFactor = 1;
-            this.lastScale = 1;
-            this.offset = {
-                x: 0,
-                y: 0
-            };
-            this.initialOffset = {
-                x: 0,
-                y: 0,
-            };
-            this.options = Object.assign({}, this.defaults, options);
-            this.setupMarkup();
-            this.bindEvents();
-            this.update();
+        this.el = el;
+        this.zoomFactor = 1;
+        this.lastScale = 1;
+        this.offset = {
+            x: 0,
+            y: 0
+        };
+        this.initialOffset = {
+            x: 0,
+            y: 0,
+        };
+        this.options = Object.assign({}, this.defaults, options);
+        this.setupMarkup();
+        this.bindEvents();
+        this.update();
 
-            // The image may already be loaded when PinchZoom is initialized,
-            // and then the load event (which trigger update) will never fire.
-            if (this.isImageLoaded(this.el)) {
-              this.updateAspectRatio();
-              this.setupOffsets();
-            }
+        // The image may already be loaded when PinchZoom is initialized,
+        // and then the load event (which trigger update) will never fire.
+        if (this.isImageLoaded(this.el)) {
+            this.updateAspectRatio();
+            this.setupOffsets();
+        }
 
-            this.enable();
+        this.enable();
 
-        },
+    },
         sum = function (a, b) {
             return a + b;
         },
@@ -142,6 +142,7 @@ var definePinchZoom = function () {
             mouseWheelEventName: 'pz_mousewheel',
             verticalPadding: 0,
             horizontalPadding: 0,
+            rtl: false,
             onZoomStart: null,
             onZoomEnd: null,
             onZoomUpdate: null,
@@ -158,7 +159,7 @@ var definePinchZoom = function () {
          */
         handleDragStart: function (event) {
             triggerEvent(this.el, this.options.dragStartEventName);
-            if(typeof this.options.onDragStart == "function"){
+            if (typeof this.options.onDragStart == "function") {
                 this.options.onDragStart(this, event)
             }
             this.stopAnimation();
@@ -180,7 +181,7 @@ var definePinchZoom = function () {
 
         handleDragEnd: function () {
             triggerEvent(this.el, this.options.dragEndEventName);
-            if(typeof this.options.onDragEnd == "function"){
+            if (typeof this.options.onDragEnd == "function") {
                 this.options.onDragEnd(this, event)
             }
             this.end();
@@ -192,7 +193,7 @@ var definePinchZoom = function () {
          */
         handleZoomStart: function (event) {
             triggerEvent(this.el, this.options.zoomStartEventName);
-            if(typeof this.options.onZoomStart == "function"){
+            if (typeof this.options.onZoomStart == "function") {
                 this.options.onZoomStart(this, event)
             }
             this.stopAnimation();
@@ -224,7 +225,7 @@ var definePinchZoom = function () {
 
         handleZoomEnd: function () {
             triggerEvent(this.el, this.options.zoomEndEventName);
-            if(typeof this.options.onZoomEnd == "function"){
+            if (typeof this.options.onZoomEnd == "function") {
                 this.options.onZoomEnd(this, event)
             }
             this.end();
@@ -254,7 +255,7 @@ var definePinchZoom = function () {
 
             this.animate(this.options.animationDuration, updateProgress, this.swing);
             triggerEvent(this.el, this.options.doubleTapEventName);
-            if(typeof this.options.onDoubleTap == "function"){
+            if (typeof this.options.onDoubleTap == "function") {
                 this.options.onDoubleTap(this, event)
             }
         },
@@ -275,10 +276,10 @@ var definePinchZoom = function () {
 
             this.lastScale = newScale;
             this.update()
-            
+
             triggerEvent(this.el, this.options.mouseWheelEventName);
             if (typeof this.options.onMouseWheel == "function") {
-            this.options.onMouseWheel(this, event);
+                this.options.onMouseWheel(this, event);
             }
         },
 
@@ -297,7 +298,7 @@ var definePinchZoom = function () {
         /**
          * Reset current image offset to that of the initial offset
          */
-        resetOffset: function() {
+        resetOffset: function () {
             this.offset.x = this.initialOffset.x;
             this.offset.y = this.initialOffset.y;
         },
@@ -307,15 +308,15 @@ var definePinchZoom = function () {
          */
         isImageLoaded: function (el) {
             if (el.nodeName === 'IMG') {
-              return el.complete && el.naturalHeight !== 0;
+                return el.complete && el.naturalHeight !== 0;
             } else {
-              return Array.from(el.querySelectorAll('img')).every(this.isImageLoaded);
+                return Array.from(el.querySelectorAll('img')).every(this.isImageLoaded);
             }
         },
 
-        setupOffsets: function() {
+        setupOffsets: function () {
             if (this.options.setOffsetsOnce && this._isOffsetsSet) {
-              return;
+                return;
             }
 
             this._isOffsetsSet = true;
@@ -333,7 +334,7 @@ var definePinchZoom = function () {
             var elWidth = this.el.offsetWidth * this.getInitialZoomFactor() * this.zoomFactor;
             var elHeight = this.el.offsetHeight * this.getInitialZoomFactor() * this.zoomFactor;
             var maxX = elWidth - this.getContainerX() + this.options.horizontalPadding,
-                maxY = elHeight -  this.getContainerY() + this.options.verticalPadding,
+                maxY = elHeight - this.getContainerY() + this.options.verticalPadding,
                 maxOffsetX = Math.max(maxX, 0),
                 maxOffsetY = Math.max(maxY, 0),
                 minOffsetX = Math.min(maxX, 0) - this.options.horizontalPadding,
@@ -366,7 +367,7 @@ var definePinchZoom = function () {
                 y: (scale - 1) * (center.y + this.offset.y)
             });
             triggerEvent(this.el, this.options.zoomUpdateEventName);
-            if(typeof this.options.onZoomUpdate == "function"){
+            if (typeof this.options.onZoomUpdate == "function") {
                 this.options.onZoomUpdate(this, event)
             }
         },
@@ -402,31 +403,31 @@ var definePinchZoom = function () {
          */
         drag: function (center, lastCenter) {
             if (lastCenter) {
-              if(this.options.lockDragAxis) {
-                // lock scroll to position that was changed the most
-                if(Math.abs(center.x - lastCenter.x) > Math.abs(center.y - lastCenter.y)) {
-                  this.addOffset({
-                    x: -(center.x - lastCenter.x),
-                    y: 0
-                  });
+                if (this.options.lockDragAxis) {
+                    // lock scroll to position that was changed the most
+                    if (Math.abs(center.x - lastCenter.x) > Math.abs(center.y - lastCenter.y)) {
+                        this.addOffset({
+                            x: -(center.x - lastCenter.x),
+                            y: 0
+                        });
+                    }
+                    else {
+                        this.addOffset({
+                            y: -(center.y - lastCenter.y),
+                            x: 0
+                        });
+                    }
                 }
                 else {
-                  this.addOffset({
-                    y: -(center.y - lastCenter.y),
-                    x: 0
-                  });
+                    this.addOffset({
+                        y: -(center.y - lastCenter.y),
+                        x: -(center.x - lastCenter.x)
+                    });
                 }
-              }
-              else {
-                this.addOffset({
-                  y: -(center.y - lastCenter.y),
-                  x: -(center.x - lastCenter.x)
-                });
-              }
-              triggerEvent(this.el, this.options.dragUpdateEventName);
-              if(typeof this.options.onDragUpdate == "function"){
-                this.options.onDragUpdate(this, event)
-            }
+                triggerEvent(this.el, this.options.dragUpdateEventName);
+                if (typeof this.options.onDragUpdate == "function") {
+                    this.options.onDragUpdate(this, event)
+                }
             }
         },
 
@@ -592,7 +593,7 @@ var definePinchZoom = function () {
                 };
             });
         },
-        
+
         /**
          * Returns the pointer of an event relative to the container offset
          * @param event
@@ -659,7 +660,7 @@ var definePinchZoom = function () {
          * @return {Number}
          */
         swing: function (p) {
-            return -Math.cos(p * Math.PI) / 2  + 0.5;
+            return -Math.cos(p * Math.PI) / 2 + 0.5;
         },
 
         getContainerX: function () {
@@ -715,12 +716,12 @@ var definePinchZoom = function () {
 
             this.resizeHandler = this.update.bind(this)
             window.addEventListener('resize', this.resizeHandler);
-            Array.from(this.el.querySelectorAll('img')).forEach(function(imgEl) {
-              imgEl.addEventListener('load', self.update.bind(self));
+            Array.from(this.el.querySelectorAll('img')).forEach(function (imgEl) {
+                imgEl.addEventListener('load', self.update.bind(self));
             });
 
             if (this.el.nodeName === 'IMG') {
-              this.el.addEventListener('load', this.update.bind(this));
+                this.el.addEventListener('load', this.update.bind(this));
             }
         },
 
@@ -734,8 +735,8 @@ var definePinchZoom = function () {
             }
 
             if (event && event.type === 'load') {
-              this.updateAspectRatio();
-              this.setupOffsets();
+                this.updateAspectRatio();
+                this.setupOffsets();
             }
 
             if (this.updatePlanned) {
@@ -747,12 +748,12 @@ var definePinchZoom = function () {
                 this.updatePlanned = false;
 
                 var zoomFactor = this.getInitialZoomFactor() * this.zoomFactor,
-                    offsetX = -this.offset.x / zoomFactor,
+                    offsetX = this.options.rtl ? (- this.getContainerX() - this.offset.x + this.el.offsetWidth) / zoomFactor : (-this.offset.x / zoomFactor), // works
                     offsetY = -this.offset.y / zoomFactor,
-                    transform3d =   'scale3d('     + zoomFactor + ', '  + zoomFactor + ',1) ' +
-                        'translate3d(' + offsetX    + 'px,' + offsetY    + 'px,0px)',
-                    transform2d =   'scale('       + zoomFactor + ', '  + zoomFactor + ') ' +
-                        'translate('   + offsetX    + 'px,' + offsetY    + 'px)',
+                    transform3d = 'scale3d(' + zoomFactor + ', ' + zoomFactor + ',1) ' +
+                        'translate3d(' + offsetX + 'px,' + offsetY + 'px,0px)',
+                    transform2d = 'scale(' + zoomFactor + ', ' + zoomFactor + ') ' +
+                        'translate(' + offsetX + 'px,' + offsetY + 'px)',
                     removeClone = (function () {
                         if (this.clone) {
                             this.clone.parentNode.removeChild(this.clone);
@@ -798,27 +799,27 @@ var definePinchZoom = function () {
         /**
          * Enables event handling for gestures
          */
-        enable: function() {
-          this.enabled = true;
+        enable: function () {
+            this.enabled = true;
         },
 
         /**
          * Disables event handling for gestures
          */
-        disable: function() {
-          this.enabled = false;
+        disable: function () {
+            this.enabled = false;
         },
 
         /**
          * Unmounts the zooming container and global event listeners
          */
         destroy: function () {
-          window.removeEventListener('resize', this.resizeHandler);
+            window.removeEventListener('resize', this.resizeHandler);
 
-          if (this.container) {
-            this.container.remove();
-            this.container = null;
-          }
+            if (this.container) {
+                this.container.remove();
+                this.container = null;
+            }
         }
 
     };
@@ -922,7 +923,7 @@ var definePinchZoom = function () {
             firstMove = true;
 
         el.addEventListener('touchstart', function (event) {
-            if(target.enabled) {
+            if (target.enabled) {
                 firstMove = true;
                 fingers = event.touches.length;
 
@@ -933,7 +934,7 @@ var definePinchZoom = function () {
         }, { passive: false });
 
         el.addEventListener('touchmove', function (event) {
-            if(target.enabled && !target.isDoubleTap) {
+            if (target.enabled && !target.isDoubleTap) {
                 if (firstMove) {
                     updateInteraction(event);
                     if (interaction) {
@@ -962,13 +963,13 @@ var definePinchZoom = function () {
         }, { passive: false });
 
         el.addEventListener('touchend', function (event) {
-            if(target.enabled) {
+            if (target.enabled) {
                 fingers = 0;
                 updateInteraction(event);
             }
         });
 
-        if(target.options.useMouseWheel) {
+        if (target.options.useMouseWheel) {
 
             el.addEventListener("mousewheel", function (event) {
                 if (target.enabled) {
@@ -976,16 +977,16 @@ var definePinchZoom = function () {
                     target.handleMouseWheel(event);
                 }
             });
-            
+
             el.addEventListener("mousedown", function (event) {
-                if(target.enabled) {
+                if (target.enabled) {
                     firstMove = true;
                     fingers = 1;
                 }
             }, { passive: true });
-            
+
             el.addEventListener('mousemove', function (event) {
-                if(target.enabled) {
+                if (target.enabled) {
                     if (firstMove) {
                         updateInteraction(event);
                         if (interaction) {
@@ -1005,7 +1006,7 @@ var definePinchZoom = function () {
             }, { passive: false });
 
             el.addEventListener("mouseup", function (event) {
-                if(target.enabled) {
+                if (target.enabled) {
                     fingers = 0;
                     updateInteraction(event);
                 }
