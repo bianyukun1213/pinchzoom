@@ -748,7 +748,7 @@ var definePinchZoom = function () {
                 this.updatePlanned = false;
 
                 var zoomFactor = this.getInitialZoomFactor() * this.zoomFactor,
-                    offsetX = this.options.rtl ? (- this.getContainerX() - this.offset.x + this.el.offsetWidth) / zoomFactor : (-this.offset.x / zoomFactor), // works
+                    offsetX = this.options.rtl ? (- this.getContainerX() - this.offset.x + this.el.offsetWidth) / zoomFactor : (-this.offset.x / zoomFactor),
                     offsetY = -this.offset.y / zoomFactor,
                     transform3d = 'scale3d(' + zoomFactor + ', ' + zoomFactor + ',1) ' +
                         'translate3d(' + offsetX + 'px,' + offsetY + 'px,0px)',
