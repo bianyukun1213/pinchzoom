@@ -6,6 +6,7 @@ declare interface IPinchZoomOptions {
     animationDuration?: number;
     maxZoom?: number;
     minZoom?: number;
+    listenOnElementNotContainer?: boolean;
     draggableUnzoomed?: boolean;
     lockDragAxis?: boolean;
     setOffsetsOnce?: boolean;
@@ -14,7 +15,7 @@ declare interface IPinchZoomOptions {
     useDoubleTap?: boolean;
     verticalPadding?: number;
     horizontalPadding?: number;
-    rtl?: number;
+    rtl?: boolean;
 
     onZoomStart?: PinchZoomEventHandler;
     onZoomEnd?: PinchZoomEventHandler;

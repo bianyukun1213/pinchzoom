@@ -126,6 +126,7 @@ var definePinchZoom = function () {
             animationDuration: 300,
             maxZoom: 4,
             minZoom: 0.5,
+            listenOnElementNotContainer: false,
             draggableUnzoomed: true,
             lockDragAxis: false,
             setOffsetsOnce: false,
@@ -712,7 +713,10 @@ var definePinchZoom = function () {
          */
         bindEvents: function () {
             var self = this;
-            detectGestures(this.container, this);
+            if (this.options.listenOnElementNotContainer)
+                detectGestures(this.el, this);
+            else
+                detectGestures(this.container, this);
 
             this.resizeHandler = this.update.bind(this)
             window.addEventListener('resize', this.resizeHandler);
