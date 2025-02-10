@@ -266,9 +266,10 @@ var definePinchZoom = function () {
          * @param event
          */
         handleMouseWheel: function (event) {
-            var center = this.getPointer(event),
+            var step = (event.detail > 0 || event.wheelDelta < 0) ? 100 : -100,
+                center = this.getPointer(event),
                 newScale = Math.min(
-                    Math.max(this.options.minZoom, this.lastScale + event.deltaY * -0.01),
+                    Math.max(this.options.minZoom, this.lastScale + step * -0.01),
                     this.options.maxZoom
                 ),
                 scale = newScale / this.lastScale;
@@ -976,6 +977,13 @@ var definePinchZoom = function () {
         if (target.options.useMouseWheel) {
 
             el.addEventListener("mousewheel", function (event) {
+                if (target.enabled) {
+                    cancelEvent(event);
+                    target.handleMouseWheel(event);
+                }
+            });
+
+            el.addEventListener("DOMMouseScroll", function (event) {
                 if (target.enabled) {
                     cancelEvent(event);
                     target.handleMouseWheel(event);
